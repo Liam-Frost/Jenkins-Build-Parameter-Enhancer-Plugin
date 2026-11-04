@@ -15,7 +15,7 @@
   <packaging>hpi</packaging>
   <name>Build Parameter Enhancer</name>
   <description>Groups, labels, collapses and searches the parameters on the Build with Parameters page, with saved presets, without changing parameter definitions.</description>
-  <url>https://github.com/${gitHubRepo}</url>
+  <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
 
   <licenses>
     <license>
@@ -24,12 +24,6 @@
     </license>
   </licenses>
 
-  <developers>
-    <developer>
-      <id>Liam-Frost</id>
-      <name>Liam-Frost</name>
-    </developer>
-  </developers>
 
   <scm>
     <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
@@ -41,7 +35,7 @@
   <properties>
     <!-- JEP-229 continuous delivery: the version is computed from git when a release is cut from CI. -->
     <changelist>999999-SNAPSHOT</changelist>
-    <gitHubRepo>Liam-Frost/Jenkins-Build-Parameter-Enhancer-Plugin</gitHubRepo>
+    <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <jenkins.baseline>2.555</jenkins.baseline>
     <jenkins.version>${jenkins.baseline}.3</jenkins.version>
     <!-- The frontend is built by the node-execution profile of the parent POM (activated by .mvn_exec_node):

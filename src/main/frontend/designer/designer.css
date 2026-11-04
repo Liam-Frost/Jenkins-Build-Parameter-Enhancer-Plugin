@@ -111,7 +111,7 @@
 .bpe-button--primary {
   border-color: transparent;
   background: var(--primary, var(--bpe-accent));
-  color: #fff;
+  color: var(--button-color--primary, #fff);
 }
 
 .bpe-button--danger:hover:not(:disabled) {

@@ -428,12 +428,12 @@ html.bpe-pending form[name="parameters"] {
   padding: 0;
   border: none;
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--dialog-box-shadow, 0 8px 32px rgba(0, 0, 0, 0.2));
   overflow: hidden;
 }
 
 .bpe-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--dialog-backdrop-background, rgba(0, 0, 0, 0.45));
   backdrop-filter: blur(2px);
 }
 
