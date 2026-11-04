@@ -55,7 +55,7 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           mvn -B -ntp -DskipTests "-Dchangelist=${version}" package
           mv target/*.hpi "target/build-parameter-enhancer-${version}.hpi"
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           files: target/*.hpi
           generate_release_notes: true
