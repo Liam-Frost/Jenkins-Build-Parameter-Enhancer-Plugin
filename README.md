@@ -4,7 +4,7 @@
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/build-parameter-enhancer.svg)](https://plugins.jenkins.io/build-parameter-enhancer)
 [![Jenkins 2.555.3+](https://img.shields.io/badge/Jenkins-2.555.3%2B-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
 [![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 English · [简体中文](README.zh-CN.md)
 
@@ -129,4 +129,4 @@ so the plugin can be installed before it is available in the update center.
 
 ## License
 
-[MIT](LICENSE.md)
+[MIT](LICENSE)

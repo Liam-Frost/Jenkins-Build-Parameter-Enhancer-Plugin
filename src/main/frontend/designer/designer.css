@@ -142,7 +142,7 @@
 
 .bpe-segmented__item.is-active {
   background: var(--bpe-accent);
-  color: #fff;
+  color: var(--button-color--primary, #fff);
 }
 
 /* ----------------------------------------------------------------- messages */

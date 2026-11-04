@@ -4,7 +4,7 @@
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/build-parameter-enhancer.svg)](https://plugins.jenkins.io/build-parameter-enhancer)
 [![Jenkins 2.555.3+](https://img.shields.io/badge/Jenkins-2.555.3%2B-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
 [![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 [English](README.md) · 简体中文
 
@@ -101,4 +101,4 @@ Jenkins 照常渲染它的参数化构建页面，插件向该页面加入一段
 
 ## 许可证
 
-[MIT](LICENSE.md)
+[MIT](LICENSE)
