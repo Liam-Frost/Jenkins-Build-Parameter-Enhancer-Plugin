@@ -1,0 +1,515 @@
+/*
+ * Styles for the enhanced Build with Parameters page.
+ *
+ * Everything is scoped under .bpe-root (or an explicit bpe- class) so no Jenkins page is affected. Colours come
+ * from Jenkins' own CSS variables, so the light and dark themes and third-party themes keep working.
+ */
+
+/* Avoid a visible reflow: the native form is hidden until it has been regrouped (removed after 3s at the latest). */
+html.bpe-pending form[name="parameters"] {
+  visibility: hidden;
+}
+
+.bpe-root {
+  --bpe-gap: 1rem;
+  --bpe-border: var(--card-border-color, var(--input-border, rgba(127, 127, 127, 0.4)));
+  --bpe-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bpe-gap);
+  margin-bottom: 1.25rem;
+  container-type: inline-size;
+}
+
+/* ------------------------------------------------------------------ toolbar */
+
+.bpe-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.bpe-toolbar__search {
+  flex: 1 1 14rem;
+  min-width: 10rem;
+}
+
+.bpe-toolbar__input {
+  width: 100%;
+}
+
+.bpe-toolbar__status {
+  color: var(--text-color-secondary, #777);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.bpe-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.bpe-toolbar__preview {
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 999px;
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--text-color-secondary, #777);
+}
+
+/* -------------------------------------------------------------------- group */
+
+.bpe-group {
+  border: 1px solid var(--bpe-border);
+  border-radius: var(--bpe-radius);
+  background: var(--card-background, transparent);
+  /* No overflow:hidden, so native dropdown panels are never clipped. */
+}
+
+/* Sub-groups sit inside the parent's body and span the full width of its grid. */
+.bpe-group--nested {
+  grid-column: 1 / -1;
+  margin: 0.5rem 0 0;
+  border-left: 3px solid var(--bpe-border);
+  border-radius: 0 var(--bpe-radius) var(--bpe-radius) 0;
+  background: var(--item-background, rgba(127, 127, 127, 0.03));
+}
+
+.bpe-group--nested .bpe-group__title {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.bpe-group--nested .bpe-group__toggle {
+  padding: 0.6rem 0.9rem;
+}
+
+.bpe-group__header {
+  display: flex;
+  align-items: center;
+}
+
+.bpe-group__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: var(--bpe-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bpe-group__toggle:hover {
+  background: var(--item-background--hover, rgba(127, 127, 127, 0.1));
+}
+
+.bpe-group__toggle:focus-visible {
+  outline: 2px solid var(--focus-input-border, var(--accent-color, #4f87c4));
+  outline-offset: -2px;
+}
+
+.bpe-group__chevron {
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+  opacity: 0.7;
+}
+
+.bpe-group--collapsed .bpe-group__chevron {
+  transform: rotate(-45deg);
+}
+
+.bpe-group__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.bpe-group__title {
+  font-weight: 600;
+}
+
+.bpe-group__description {
+  color: var(--text-color-secondary, #777);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 400;
+}
+
+.bpe-group__count {
+  margin-left: auto;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 999px;
+  color: var(--text-color-secondary, #777);
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+.bpe-group__body {
+  display: grid;
+  gap: 0.35rem 1.25rem;
+  padding: 0.25rem 1rem 1rem;
+  border-top: 1px solid var(--bpe-border);
+  grid-template-columns: 1fr;
+}
+
+.bpe-group__body[data-columns="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Narrow viewports and narrow containers both fall back to one column. */
+@container (max-width: 720px) {
+  .bpe-group__body[data-columns="2"] {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .bpe-group__body[data-columns="2"] {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------------------------------------------------------------------- field */
+
+.bpe-field {
+  min-width: 0;
+  padding: 0.5rem 0;
+}
+
+.bpe-field--full {
+  grid-column: 1 / -1;
+}
+
+.bpe-field__header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.1rem;
+}
+
+.bpe-field__label {
+  font-weight: var(--form-label-font-weight, 600);
+}
+
+.bpe-field__summary {
+  margin: 0 0 0.35rem;
+  color: var(--text-color-secondary, #777);
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.4;
+  /* Keeps a long original description from dominating the page. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.bpe-field__aux {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bpe-field__aux--inline {
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.bpe-chip {
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 4px;
+  background: var(--item-background, rgba(127, 127, 127, 0.07));
+  color: var(--text-color-secondary, #777);
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+/* The native label and description of enhanced fields; the plugin shows its own. */
+.bpe-root .bpe-native-hidden {
+  display: none !important;
+}
+
+/* The native rows carry their own margins intended for a vertical list. */
+.bpe-field .jenkins-form-item {
+  margin: 0;
+  padding: 0;
+}
+
+.bpe-field .jenkins-form-item .setting-main {
+  max-width: none;
+}
+
+.bpe-field input[type="text"],
+.bpe-field input[type="password"],
+.bpe-field textarea,
+.bpe-field select,
+.bpe-field .jenkins-select,
+.bpe-field .jenkins-input {
+  max-width: 100%;
+}
+
+/* --------------------------------------------------------------------- help */
+
+.bpe-help-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: 0;
+  border: 1px solid var(--bpe-border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-color-secondary, #777);
+  font-size: var(--font-size-xs, 0.75rem);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bpe-help-button:hover {
+  border-color: var(--accent-color, #4f87c4);
+  color: var(--text-color, inherit);
+}
+
+.bpe-help-button[aria-expanded="true"] {
+  border-color: var(--accent-color, #4f87c4);
+  color: var(--accent-color, #4f87c4);
+}
+
+.bpe-help {
+  margin: 0.4rem 0 0;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--bpe-border);
+  border-left: 3px solid var(--accent-color, #4f87c4);
+  border-radius: 6px;
+  background: var(--item-background, rgba(127, 127, 127, 0.07));
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.5;
+}
+
+.bpe-help__caption {
+  margin-top: 0.5rem;
+  color: var(--text-color-secondary, #777);
+  font-size: var(--font-size-xs, 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bpe-help__body > :first-child,
+.bpe-help__native > :first-child {
+  margin-top: 0;
+}
+
+.bpe-help__body > :last-child,
+.bpe-help__native > :last-child {
+  margin-bottom: 0;
+}
+
+.bpe-help__native {
+  color: inherit;
+}
+
+/* ------------------------------------------------------------------- states */
+
+/*
+ * The `hidden` attribute only carries `display: none` from the UA stylesheet, so any class selector that sets
+ * `display` (.bpe-group__body is a grid) wins over it. Collapsing a group and closing a help panel both rely on
+ * the attribute, so restore its meaning explicitly.
+ */
+.bpe-root [hidden] {
+  display: none !important;
+}
+
+.bpe-hidden {
+  display: none !important;
+}
+
+.bpe-empty {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--bpe-border);
+  border-radius: var(--bpe-radius);
+  color: var(--text-color-secondary, #777);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ presets */
+
+.bpe-preset-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Widen the preset selector so preset names don't truncate badly */
+.bpe-preset-selector .bpe-select__trigger {
+  min-width: 11rem;
+}
+
+/* Dialog selects fill the full width */
+.bpe-dialog__field .bpe-select {
+  width: 100%;
+}
+
+.bpe-preset-delete {
+  padding: 0.2rem 0.4rem;
+  color: var(--warning-color, #c8a21a);
+}
+
+.bpe-preset-delete svg {
+  display: block;
+}
+
+/* ------------------------------------------------------------------ classic-form banner */
+
+.bpe-classic-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.9rem;
+  background: var(--item-background, rgba(127,127,127,.06));
+  border: 1px solid var(--card-border-color, rgba(127,127,127,.2));
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary, #777);
+}
+
+/* ------------------------------------------------------------------ manage presets dialog */
+
+.bpe-manage-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bpe-manage-table tr + tr {
+  border-top: 1px solid var(--card-border-color, rgba(127,127,127,.15));
+}
+
+.bpe-manage-table td {
+  padding: 0.5rem 0.3rem;
+  vertical-align: middle;
+}
+
+.bpe-manage-table__name {
+  width: 100%;
+}
+
+.bpe-manage-table__name .jenkins-input {
+  width: 100%;
+}
+
+.bpe-manage-table__actions {
+  display: flex;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ dialog */
+
+.bpe-dialog {
+  margin: auto;
+  width: 100%;
+  max-width: 460px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.bpe-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.bpe-dialog__inner {
+  background: var(--background, var(--card-background, #fff));
+  color: var(--text-color, inherit);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bpe-dialog__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.bpe-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.bpe-dialog__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.bpe-dialog__label {
+  font-weight: 600;
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.bpe-dialog__buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--card-border-color, rgba(127,127,127,0.15));
+  margin-top: 0.25rem;
+}
+
+.bpe-preview-note {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--warning-color, #c8a21a);
+  border-radius: 6px;
+  color: var(--text-color, inherit);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+.bpe-preview-title {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.bpe-preview-blocked {
+  margin: 0.75rem 0 0;
+  color: var(--warning-color, #c8a21a);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+/* The designer embeds the preview in an iframe; keep the padding tight. */
+body.full-screen .bpe-preview-note,
+body.full-screen .bpe-root {
+  max-width: none;
+}
+
+.bpe-preset-restore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bpe-preset-restore svg {
+  display: block;
+}

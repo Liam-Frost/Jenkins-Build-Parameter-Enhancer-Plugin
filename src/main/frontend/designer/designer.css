@@ -1,0 +1,632 @@
+/*
+ * Build Form Designer styles.
+ *
+ * Every rule is scoped to .bpe-designer or an bpe- class, so nothing here can affect other Jenkins pages. Colours
+ * are taken from Jenkins' CSS variables, which keeps the light theme, the dark theme and third-party themes
+ * working without overriding any Jenkins rule.
+ */
+
+.bpe-designer {
+  --bpe-border: var(--card-border-color, var(--input-border, rgba(127, 127, 127, 0.35)));
+  --bpe-radius: 8px;
+  --bpe-accent: var(--accent-color, #4f87c4);
+  --bpe-muted: var(--text-color-secondary, #777);
+  --bpe-surface: var(--card-background, transparent);
+  --bpe-subtle: var(--item-background, rgba(127, 127, 127, 0.06));
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--text-color, inherit);
+}
+
+/* ------------------------------------------------------------------- header */
+
+.bpe-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.bpe-header__titles {
+  flex: 1 1 20rem;
+}
+
+.bpe-header__title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.bpe-header__subtitle {
+  margin: 0.15rem 0 0;
+  color: var(--bpe-muted);
+}
+
+.bpe-header__state {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bpe-state {
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 999px;
+  color: var(--bpe-muted);
+  font-size: 0.8rem;
+}
+
+.bpe-state--dirty {
+  border-color: var(--warning-color, #c8a21a);
+  color: var(--warning-color, #c8a21a);
+}
+
+/* ------------------------------------------------------------------ actions */
+
+.bpe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--bpe-border);
+}
+
+.bpe-actions__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bpe-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 6px;
+  background: var(--bpe-surface);
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bpe-button:hover:not(:disabled) {
+  border-color: var(--bpe-accent);
+}
+
+.bpe-button:focus-visible {
+  outline: 2px solid var(--bpe-accent);
+  outline-offset: 1px;
+}
+
+.bpe-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.bpe-button--primary {
+  border-color: transparent;
+  background: var(--primary, var(--bpe-accent));
+  color: #fff;
+}
+
+.bpe-button--danger:hover:not(:disabled) {
+  border-color: var(--error-color, #c9302c);
+  color: var(--error-color, #c9302c);
+}
+
+.bpe-segmented {
+  display: inline-flex;
+  border: 1px solid var(--bpe-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bpe-segmented__item {
+  padding: 0.3rem 0.7rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.bpe-segmented__item + .bpe-segmented__item {
+  border-left: 1px solid var(--bpe-border);
+}
+
+.bpe-segmented__item.is-active {
+  background: var(--bpe-accent);
+  color: #fff;
+}
+
+/* ----------------------------------------------------------------- messages */
+
+.bpe-message {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--bpe-border);
+  border-left: 3px solid var(--bpe-accent);
+  border-radius: 6px;
+  background: var(--bpe-subtle);
+  font-size: 0.875rem;
+}
+
+.bpe-message--error {
+  border-left-color: var(--error-color, #c9302c);
+}
+
+.bpe-message ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.bpe-warning {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--warning-color, #c8a21a);
+  border-radius: 6px;
+  color: var(--text-color, inherit);
+  font-size: 0.875rem;
+}
+
+.bpe-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--warning-color, #c8a21a);
+  border-radius: var(--bpe-radius);
+  background: var(--bpe-subtle);
+  font-size: 0.875rem;
+}
+
+.bpe-banner__body p {
+  margin: 0.3rem 0 0;
+}
+
+.bpe-banner__actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* ------------------------------------------------------------- three columns */
+
+.bpe-columns {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(16rem, 1fr) minmax(22rem, 1.6fr) minmax(18rem, 1fr);
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .bpe-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bpe-columns > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 800px) {
+  .bpe-columns {
+    grid-template-columns: 1fr;
+  }
+  .bpe-columns > :last-child {
+    grid-column: auto;
+  }
+}
+
+.bpe-panel {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--bpe-border);
+  border-radius: var(--bpe-radius);
+  background: var(--bpe-surface);
+  max-height: calc(100vh - 16rem);
+  min-height: 20rem;
+}
+
+.bpe-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--bpe-border);
+}
+
+.bpe-panel__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.bpe-panel__header > :last-child:not(.bpe-panel__title) {
+  margin-left: auto;
+}
+
+.bpe-panel__toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--bpe-border);
+}
+
+.bpe-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.65rem 0.85rem;
+}
+
+/* ------------------------------------------------------------------- inputs */
+
+.bpe-input {
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--input-border, var(--bpe-border));
+  border-radius: var(--form-input-border-radius, 6px);
+  background: var(--input-color, var(--background, #fff));
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.bpe-input:focus {
+  border-color: var(--focus-input-border, var(--bpe-accent));
+  outline: none;
+}
+
+/* Selects in the properties panel span the full width, like the text inputs next to them. */
+.bpe-field-group .bpe-select {
+  width: 100%;
+}
+
+.bpe-textarea {
+  resize: vertical;
+  font-family: var(--font-family-mono, monospace);
+  font-size: 0.8rem;
+}
+
+.bpe-label {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.bpe-check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.bpe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bpe-field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.bpe-hint {
+  margin: -0.4rem 0 0;
+  color: var(--bpe-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.bpe-muted {
+  color: var(--bpe-muted);
+  font-size: 0.82rem;
+}
+
+.bpe-sep {
+  margin: 0.75rem 0;
+  border: 0;
+  border-top: 1px solid var(--bpe-border);
+}
+
+.bpe-identity {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 6px;
+  background: var(--bpe-subtle);
+}
+
+/* -------------------------------------------------------------------- lists */
+
+.bpe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bpe-list__item {
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 6px;
+  cursor: grab;
+}
+
+.bpe-list__item:hover {
+  border-color: var(--bpe-accent);
+}
+
+.bpe-list__item.is-selected {
+  border-color: var(--bpe-accent);
+  box-shadow: inset 2px 0 0 var(--bpe-accent);
+}
+
+.bpe-list__item.is-dragging {
+  opacity: 0.4;
+}
+
+.bpe-list__main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.bpe-list__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.bpe-list__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+
+/* ------------------------------------------------------------------ structure */
+
+.bpe-group-card {
+  margin-bottom: 0.7rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: var(--bpe-radius);
+}
+
+.bpe-group-card.is-selected {
+  border-color: var(--bpe-accent);
+}
+
+.bpe-group-card.is-dragging {
+  opacity: 0.6;
+}
+
+.bpe-group-card--unassigned {
+  border-style: dashed;
+}
+
+/* Nested group: sits inside its parent's body, marked by an accent left border. */
+.bpe-group-card.is-nested {
+  margin-bottom: 0;
+  border-left: 3px solid var(--bpe-accent);
+  background: var(--bpe-subtle);
+}
+
+.bpe-nested-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.bpe-group-card__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--bpe-border);
+  cursor: pointer;
+}
+
+.bpe-group-card__title {
+  font-weight: 600;
+}
+
+.bpe-group-card__header > :last-child {
+  margin-left: auto;
+}
+
+.bpe-group-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.6rem;
+}
+
+.bpe-group-card__body.is-over {
+  background: var(--bpe-subtle);
+  box-shadow: inset 0 0 0 2px var(--bpe-accent);
+  border-radius: 0 0 var(--bpe-radius) var(--bpe-radius);
+}
+
+.bpe-dropzone-hint {
+  margin: 0;
+  padding: 0.4rem;
+  border: 1px dashed var(--bpe-border);
+  border-radius: 6px;
+  color: var(--bpe-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.bpe-field-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 6px;
+  background: var(--bpe-surface);
+  font-size: 0.875rem;
+  cursor: grab;
+}
+
+.bpe-field-row:hover {
+  border-color: var(--bpe-accent);
+}
+
+.bpe-field-row.is-selected {
+  border-color: var(--bpe-accent);
+  box-shadow: inset 2px 0 0 var(--bpe-accent);
+}
+
+.bpe-field-row.is-dragging {
+  opacity: 0.4;
+}
+
+.bpe-field-row.is-stale {
+  border-color: var(--warning-color, #c8a21a);
+}
+
+.bpe-field-row__label {
+  font-weight: 600;
+}
+
+.bpe-field-row__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+
+.bpe-handle {
+  padding: 0 0.2rem;
+  border: 0;
+  background: transparent;
+  color: var(--bpe-muted);
+  font: inherit;
+  letter-spacing: -2px;
+  cursor: grab;
+}
+
+/* --------------------------------------------------------------------- tags */
+
+.bpe-tag {
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 4px;
+  color: var(--bpe-muted);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.bpe-tag--warn {
+  border-color: var(--warning-color, #c8a21a);
+  color: var(--warning-color, #c8a21a);
+}
+
+.bpe-tag--new {
+  border-color: var(--success-color, #3f8b3f);
+  color: var(--success-color, #3f8b3f);
+}
+
+.bpe-badge {
+  min-width: 1.4rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: var(--bpe-subtle);
+  color: var(--bpe-muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.bpe-code {
+  padding: 0.05rem 0.3rem;
+  border: 1px solid var(--bpe-border);
+  border-radius: 4px;
+  background: var(--bpe-subtle);
+  font-family: var(--font-family-mono, monospace);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.bpe-code--block {
+  display: inline-block;
+  margin: 0.2rem 0;
+}
+
+/* ------------------------------------------------------------------ preview */
+
+.bpe-preview-pane {
+  border: 1px solid var(--bpe-border);
+  border-radius: var(--bpe-radius);
+  overflow: hidden;
+}
+
+.bpe-preview-frame {
+  display: block;
+  width: 100%;
+  height: calc(100vh - 20rem);
+  min-height: 28rem;
+  border: 0;
+  background: var(--background, #fff);
+}
+
+.bpe-drag-overlay {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--bpe-accent);
+  border-radius: 6px;
+  background: var(--background, #fff);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 18%);
+  font-family: var(--font-family-mono, monospace);
+  font-size: 0.8rem;
+}
+
+/* While a group is dragged: every group body is a nest target, so give empty ones room and outline them. */
+.bpe-designer.is-dragging-group .bpe-group-card__body {
+  min-height: 3.5rem;
+  outline: 1px dashed var(--bpe-border, rgba(127, 127, 127, 0.4));
+  outline-offset: -4px;
+  border-radius: 0 0 var(--bpe-radius) var(--bpe-radius);
+}
+
+.bpe-designer.is-dragging-group .bpe-group-card__body.is-over {
+  outline: none;
+}
+
+/* Where the dragged parameter or group will go. Nothing else moves while dragging. */
+.bpe-drop-line {
+  flex: none;
+  height: 3px;
+  margin: 1px 0;
+  border-radius: 2px;
+  background: var(--bpe-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--bpe-accent) 25%, transparent);
+}
+
+.bpe-top-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* A sub-group sits between its parent's parameters, so keep it compact. */
+.bpe-group-card.is-nested {
+  margin: 0.15rem 0;
+}

@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+  <f:section title="${%Build Parameter Enhancer}">
+    <f:entry title="${%Enable enhanced build forms}" field="enabled">
+      <f:checkbox default="true"/>
+      <div class="jenkins-form-description">${%enabled.description}</div>
+    </f:entry>
+    <f:entry title="${%Auto Generate Layout rules}" field="rulesJson">
+      <f:textarea/>
+      <div class="jenkins-form-description">${%rules.description}</div>
+    </f:entry>
+  </f:section>
+</j:jelly>

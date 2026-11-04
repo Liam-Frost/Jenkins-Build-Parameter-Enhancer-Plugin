@@ -1,0 +1,1 @@
+Activates the node-execution profile of the Jenkins plugin parent POM (npm ci, npm run mvnbuild, npm run mvntest).

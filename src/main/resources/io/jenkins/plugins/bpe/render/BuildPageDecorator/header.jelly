@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+<!--
+  Injected into every page's <head>, but only emits anything when the current request is the build form of a job
+  that has the enhancement enabled and a published layout (BuildPageDecorator#getBootData returns null otherwise).
+-->
+<j:jelly xmlns:j="jelly:core">
+  <j:set var="bpeConfig" value="${it.bootData}"/>
+  <j:if test="${bpeConfig != null}">
+    <link rel="stylesheet" type="text/css" href="${it.resourceBase}/generated/bpe-enhancer.css"/>
+    <!-- Not deferred: the script marks the document before the form is painted to avoid a visible reflow. -->
+    <script id="bpe-boot" src="${it.resourceBase}/generated/bpe-enhancer.js" data-bpe-config="${bpeConfig}"><!-- --></script>
+  </j:if>
+</j:jelly>

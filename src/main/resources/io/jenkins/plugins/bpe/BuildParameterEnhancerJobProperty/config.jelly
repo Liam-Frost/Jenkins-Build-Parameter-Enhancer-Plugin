@@ -1,0 +1,24 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+  <!--
+    The switch is stored outside config.xml (see FormDesignStore), so it is read from the descriptor rather than
+    from an instance: a Pipeline properties([...]) step must not be able to erase the layout.
+  -->
+  <f:entry title="${%Enhanced Build with Parameters page}">
+    <f:checkbox name="bpeEnabled" title="${%Use the published grouped layout}"
+                checked="${descriptor.enabledForCurrentJob}"/>
+    <j:choose>
+      <j:when test="${descriptor.publishedForCurrentJob}">
+        <div class="jenkins-form-description">${%published.description}</div>
+      </j:when>
+      <j:otherwise>
+        <div class="jenkins-form-description">${%unpublished.description}</div>
+      </j:otherwise>
+    </j:choose>
+    <j:if test="${descriptor.designerUrlForCurrentJob != null}">
+      <div style="margin-top: 0.75rem">
+        <a class="jenkins-button jenkins-button--tertiary" href="${descriptor.designerUrlForCurrentJob}">${%Design Build Form}</a>
+      </div>
+    </j:if>
+  </f:entry>
+</j:jelly>

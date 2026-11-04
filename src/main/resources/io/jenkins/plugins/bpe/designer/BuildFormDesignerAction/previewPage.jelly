@@ -1,0 +1,27 @@
+<?jelly escape-by-default='true'?>
+<!--
+  Rendered inside the designer's Preview pane (POST .../build-parameter-enhancer/preview with a layout). It includes the
+  real value pages of the real parameter definitions, so what is shown is what users get, including third-party
+  controls. The form cannot start a build: its action resolves to BuildFormDesignerAction#doBuild, which always
+  fails, and the enhancer blocks submission in preview mode.
+-->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+  <l:layout title="${%Preview}" type="full-screen">
+    <l:main-panel>
+      <link rel="stylesheet" type="text/css"
+            href="${rootURL}/plugin/build-parameter-enhancer/generated/bpe-enhancer.css"/>
+      <div class="bpe-preview-note">${%Preview only. The Build button is disabled here.}</div>
+      <j:choose>
+        <j:when test="${it.parametersDefinitionProperty != null}">
+          <h1 class="bpe-preview-title">${it.job.pronoun} ${it.job.displayName}</h1>
+          <st:include it="${it.parametersDefinitionProperty}" page="contents.jelly"/>
+        </j:when>
+        <j:otherwise>
+          <p class="jenkins-description">${%This job has no parameters yet.}</p>
+        </j:otherwise>
+      </j:choose>
+      <script src="${rootURL}/plugin/build-parameter-enhancer/generated/bpe-enhancer.js"
+              data-bpe-config="${request2.getAttribute('bpeConfig')}"><!-- --></script>
+    </l:main-panel>
+  </l:layout>
+</j:jelly>

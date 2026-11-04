@@ -1,0 +1,35 @@
+[
+  {
+    "groupId": "source",
+    "title": "Source revisions",
+    "description": "Branches and commits of each repository",
+    "collapsed": false,
+    "columns": 2,
+    "types": ["git"],
+    "patterns": ["*_BRANCH", "BRANCH", "*_COMMIT", "*_COMMIT_HASH", "*_COMMIT_ID", "*_HASH", "*_SHA", "*_REVISION", "*_TAG", "*_REF", "GIT_*"]
+  },
+  {
+    "groupId": "config",
+    "title": "Build configuration",
+    "collapsed": false,
+    "columns": 2,
+    "patterns": ["BUILD_CONFIG*", "BUILD_TYPE", "BUILD_ENV*", "CONFIG", "ENV", "ENVIRONMENT", "BUILDENV", "TARGET_ENV", "VERSION", "*_VERSION", "PLATFORM", "CONFIGURATION"]
+  },
+  {
+    "groupId": "modules",
+    "title": "Modules",
+    "description": "Choose which modules to build",
+    "collapsed": false,
+    "columns": 2,
+    "onlyTypes": ["boolean"],
+    "patterns": ["BUILD_*", "WITH_*", "INCLUDE_*", "MODULE_*"]
+  },
+  {
+    "groupId": "advanced",
+    "title": "Advanced options",
+    "description": "Cleanup, packaging, signing and tuning. Defaults are usually fine.",
+    "collapsed": true,
+    "columns": 2,
+    "patterns": ["CLEAN_*", "SIGN_*", "*_SIGNING", "ENABLE_*", "LZMA_*", "PACKAGE_*", "CHANGELOG_*", "TIMESTAMP_*", "*_BATCH_SIZE", "*_FILTER", "*_TARGET", "*_MODE", "*_PROFILE", "*_THREADS", "*_TIMEOUT", "SKIP_*", "DEBUG_*", "VERBOSE*"]
+  }
+]

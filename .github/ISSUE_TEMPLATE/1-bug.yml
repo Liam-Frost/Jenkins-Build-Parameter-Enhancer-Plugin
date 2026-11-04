@@ -1,0 +1,49 @@
+name: Bug report
+description: Something on the Build with Parameters page or in the designer does not work as expected
+labels: [ bug ]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Create a Pipeline job with these parameters: ...
+        2. Publish a layout that ...
+        3. Open Build with Parameters and ...
+    validations:
+      required: true
+  - type: input
+    id: jenkins
+    attributes:
+      label: Jenkins version
+      placeholder: "2.555.3"
+    validations:
+      required: true
+  - type: input
+    id: plugin
+    attributes:
+      label: Plugin version
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+  - type: textarea
+    id: params
+    attributes:
+      label: Parameter types involved
+      description: Including parameter types from other plugins (Git Parameter, Active Choices, ...).
+  - type: textarea
+    id: logs
+    attributes:
+      label: Browser console and Jenkins log output
+      description: Messages starting with `[build-parameter-enhancer]`. Remove anything confidential.
+      render: text

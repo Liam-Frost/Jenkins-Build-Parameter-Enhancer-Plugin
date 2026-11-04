@@ -1,0 +1,5 @@
+<?jelly escape-by-default='true'?>
+<div>
+    Groups, labels, collapses and searches the parameters on the Build with Parameters page, and lets users save
+    the values they build with as presets. Parameter definitions and submitted values are not changed.
+</div>
