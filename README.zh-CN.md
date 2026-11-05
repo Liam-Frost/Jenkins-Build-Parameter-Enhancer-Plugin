@@ -2,8 +2,6 @@
 
 [![Build](https://github.com/Liam-Frost/Jenkins-Build-Parameter-Enhancer-Plugin/actions/workflows/build.yml/badge.svg)](https://github.com/Liam-Frost/Jenkins-Build-Parameter-Enhancer-Plugin/actions/workflows/build.yml)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/build-parameter-enhancer.svg)](https://plugins.jenkins.io/build-parameter-enhancer)
-[![Jenkins 2.555.3+](https://img.shields.io/badge/Jenkins-2.555.3%2B-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
-[![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 [English](README.md) · 简体中文
@@ -28,10 +26,7 @@
   <img src="docs/images/designer-zh.png" alt="构建表单设计器：参数库、表单结构和属性面板" width="860">
 </p>
 
-## 环境要求
-
-- Jenkins 2.555.3 或更高版本
-- Controller 上运行 Java 21 或更高版本
+## 兼容性
 
 插件只依赖 Jenkins 核心。界面支持英文和简体中文，跟随 Jenkins 页面显示的语言。
 

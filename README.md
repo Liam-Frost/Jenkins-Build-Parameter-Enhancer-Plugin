@@ -2,8 +2,6 @@
 
 [![Build](https://github.com/Liam-Frost/Jenkins-Build-Parameter-Enhancer-Plugin/actions/workflows/build.yml/badge.svg)](https://github.com/Liam-Frost/Jenkins-Build-Parameter-Enhancer-Plugin/actions/workflows/build.yml)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/build-parameter-enhancer.svg)](https://plugins.jenkins.io/build-parameter-enhancer)
-[![Jenkins 2.555.3+](https://img.shields.io/badge/Jenkins-2.555.3%2B-D24939?logo=jenkins&logoColor=white)](https://www.jenkins.io/)
-[![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 English · [简体中文](README.zh-CN.md)
@@ -36,10 +34,7 @@ Jenkinsfiles keep working exactly as before.
   <img src="docs/images/designer.png" alt="Build Form Designer: parameters library, form structure and properties" width="860">
 </p>
 
-## Requirements
-
-- Jenkins 2.555.3 or newer
-- Java 21 or newer on the controller
+## Compatibility
 
 The plugin depends on Jenkins core only. The interface is in English and Simplified Chinese, following the
 language Jenkins shows the page in.
