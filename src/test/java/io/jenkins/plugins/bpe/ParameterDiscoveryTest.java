@@ -40,11 +40,11 @@ class ParameterDiscoveryTest {
                 "every definition is discovered");
 
         Map<String, DiscoveredParameter> m = byName(found);
-        assertEquals("string", m.get("APP_BRANCH").typeKey());
-        assertEquals("choice", m.get("BUILD_CONFIG").typeKey());
-        assertEquals("boolean", m.get("BUILD_APP").typeKey());
-        assertEquals("text", m.get("APP_FILES_FILTER").typeKey(), "text is not reported as string");
-        assertEquals("password", m.get("DEPLOY_TOKEN").typeKey());
+        assertEquals("string", m.get("APP_BRANCH").kind());
+        assertEquals("choice", m.get("BUILD_CONFIG").kind());
+        assertEquals("boolean", m.get("BUILD_APP").kind());
+        assertEquals("text", m.get("APP_FILES_FILTER").kind(), "text is not reported as string");
+        assertEquals("password", m.get("DEPLOY_TOKEN").kind());
         assertEquals(List.of("Release", "Debug"), m.get("BUILD_CONFIG").choices());
         assertEquals("main", m.get("APP_BRANCH").defaultValue());
         assertEquals("true", m.get("BUILD_APP").defaultValue());

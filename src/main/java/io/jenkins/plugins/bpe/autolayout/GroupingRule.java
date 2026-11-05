@@ -54,10 +54,10 @@ public final class GroupingRule {
     }
 
     public boolean matches(DiscoveredParameter p) {
-        if (!onlyTypes.isEmpty() && !onlyTypes.contains(p.typeKey())) {
+        if (!onlyTypes.isEmpty() && !onlyTypes.contains(p.kind())) {
             return false;
         }
-        if (types.contains(p.typeKey())) {
+        if (types.contains(p.kind())) {
             return true;
         }
         for (Pattern pat : compiled) {

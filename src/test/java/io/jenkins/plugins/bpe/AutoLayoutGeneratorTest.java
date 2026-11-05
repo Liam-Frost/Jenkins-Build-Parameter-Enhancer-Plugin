@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test;
 /** Auto Generate Layout is deterministic and never loses a parameter. No Jenkins instance needed. */
 class AutoLayoutGeneratorTest {
 
-    private static DiscoveredParameter p(String name, String typeKey) {
-        return new DiscoveredParameter(name, "C" + typeKey, typeKey, typeKey, null, null, null, null, null, false);
+    private static DiscoveredParameter p(String name, String kind) {
+        return new DiscoveredParameter(name, "C" + kind, kind, kind, null, null, null, null, null, false);
     }
 
     private static List<DiscoveredParameter> sampleParameters() {

@@ -136,7 +136,7 @@ public final class AutoLayoutGenerator {
 
     private static FieldLayout defaultField(DiscoveredParameter p) {
         FieldLayout f = new FieldLayout();
-        if ("text".equals(p.typeKey())) {
+        if ("text".equals(p.kind())) {
             f.setWidth(FieldLayout.WIDTH_FULL);
         }
         return f;

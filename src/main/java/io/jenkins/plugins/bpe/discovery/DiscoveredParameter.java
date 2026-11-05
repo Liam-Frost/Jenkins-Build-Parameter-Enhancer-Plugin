@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @param name real parameter name (never changed by the plugin)
  * @param typeClass fully qualified class of the definition, used for change detection
- * @param typeKey short key: string, text, boolean, choice, password, git or other
+ * @param kind short key: string, text, boolean, choice, password, git or other
  * @param typeLabel human readable type (descriptor display name)
  * @param description raw description as configured (may contain markup)
  * @param descriptionHtml description rendered through Jenkins' configured markup formatter
@@ -19,7 +19,7 @@ import java.util.List;
 public record DiscoveredParameter(
         String name,
         String typeClass,
-        String typeKey,
+        String kind,
         String typeLabel,
         String description,
         String descriptionHtml,
@@ -30,6 +30,6 @@ public record DiscoveredParameter(
 
     /** Types whose native markup is the standard {@code f:entry} structure, so labels can be restyled safely. */
     public boolean isManaged() {
-        return !"other".equals(typeKey);
+        return !"other".equals(kind);
     }
 }

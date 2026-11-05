@@ -143,7 +143,7 @@ public final class RenderModel {
             }
             JSONObject fo = new JSONObject();
             fo.put("name", n);
-            fo.put("type", p.typeKey());
+            fo.put("type", p.kind());
             fo.put("managed", p.isManaged());
             fo.put("label", f.getLabel() == null ? n : f.getLabel());
             fo.put("labelOverridden", f.getLabel() != null && !f.getLabel().equals(n));

@@ -46,7 +46,7 @@ public final class ParameterDiscovery {
     }
 
     public static DiscoveredParameter describe(ParameterDefinition d) {
-        String typeKey = typeKey(d);
+        String kind = kind(d);
         boolean sensitive = isSensitive(d);
         String raw = d.getDescription();
         String html = formatMarkup(raw);
@@ -63,7 +63,7 @@ public final class ParameterDiscovery {
         return new DiscoveredParameter(
                 d.getName(),
                 d.getClass().getName(),
-                typeKey,
+                kind,
                 typeLabel,
                 raw,
                 html,
@@ -73,7 +73,7 @@ public final class ParameterDiscovery {
                 sensitive);
     }
 
-    public static String typeKey(ParameterDefinition d) {
+    public static String kind(ParameterDefinition d) {
         if (d instanceof PasswordParameterDefinition) {
             return "password";
         }

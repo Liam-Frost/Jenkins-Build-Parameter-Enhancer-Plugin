@@ -141,14 +141,18 @@ try {
   await cmd("Page.enable");
   await cmd("Network.enable");
 
-  const evaluate = async (expr) => {
-    const r = await cmd("Runtime.evaluate", {
-      expression: `Promise.resolve((async () => { ${expr} })()).then(v => JSON.stringify(v ?? null))`,
+  // Runs `fn` in the page with `args` passed as values, so no data is ever spliced into source code.
+  const run = async (fn, ...args) => {
+    const { result: page } = await cmd("Runtime.evaluate", { expression: "globalThis" });
+    const r = await cmd("Runtime.callFunctionOn", {
+      functionDeclaration: fn.toString(),
+      objectId: page.objectId,
+      arguments: args.map((value) => ({ value })),
       awaitPromise: true,
       returnByValue: true,
     });
-    if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description ?? "eval failed");
-    return JSON.parse(r.result.value);
+    if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description ?? "call failed");
+    return r.result.value ?? null;
   };
   const open = async (path, lang) => {
     await cmd("Network.setExtraHTTPHeaders", { headers: { "Accept-Language": lang === "zh" ? "zh-CN,zh" : "en-US,en" } });
@@ -157,27 +161,41 @@ try {
     await sleep(3500);
   };
   // POST from the page itself, so Jenkins' session and crumb apply.
-  const post = (path, body, json = true) => evaluate(`
-    const h = document.head.dataset;
-    const headers = { [h.crumbHeader]: h.crumbValue, "Content-Type": ${json ? '"application/json"' : '"application/xml"'} };
-    const r = await fetch(${JSON.stringify(base)} + ${JSON.stringify(path)}, { method: "POST", headers, body: ${JSON.stringify(json ? JSON.stringify(body) : body)} });
-    return { status: r.status, body: (await r.text()).slice(0, 300) };
-  `);
+  const post = (path, body, json = true) =>
+    run(
+      async (url, type, payload) => {
+        const h = document.head.dataset;
+        const r = await fetch(url, { method: "POST", headers: { [h.crumbHeader]: h.crumbValue, "Content-Type": type }, body: payload });
+        const text = await r.text();
+        return { status: r.status, body: text.slice(0, 300), json: text.startsWith("{") ? JSON.parse(text) : null };
+      },
+      base + path,
+      json ? "application/json" : "application/xml",
+      json ? JSON.stringify(body) : body,
+    );
   const shot = async (name, width, height, clipSelector, pad = 0) => {
     await cmd("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 1, mobile: false });
     await sleep(600);
     if (clipSelector) {
       // Size the window to the content so the sticky Build bar sits right under the form, not at the window bottom.
-      const h = await evaluate(`return document.documentElement.scrollHeight;`);
+      const h = await run(() => document.documentElement.scrollHeight);
       await cmd("Emulation.setDeviceMetricsOverride", { width, height: Math.min(h, height), deviceScaleFactor: 1, mobile: false });
       await sleep(400);
     }
     let clip;
     if (clipSelector) {
-      clip = await evaluate(`const r = document.querySelector(${JSON.stringify(clipSelector)}).getBoundingClientRect();
-        const sticker = document.querySelector("#bottom-sticker");
-        const bottom = Math.max(r.bottom, sticker ? sticker.getBoundingClientRect().bottom : 0);
-        return { x: Math.max(0, r.x - ${pad}), y: Math.max(0, r.y - 16), width: Math.min(${width}, r.width + 16 + ${pad}), height: bottom - Math.max(0, r.y - 16) + 16, scale: 1 };`);
+      clip = await run(
+        (selector, padding, maxWidth) => {
+          const r = document.querySelector(selector).getBoundingClientRect();
+          const sticker = document.querySelector("#bottom-sticker");
+          const bottom = Math.max(r.bottom, sticker ? sticker.getBoundingClientRect().bottom : 0);
+          const top = Math.max(0, r.y - 16);
+          return { x: Math.max(0, r.x - padding), y: top, width: Math.min(maxWidth, r.width + 16 + padding), height: bottom - top + 16, scale: 1 };
+        },
+        clipSelector,
+        pad,
+        width,
+      );
     }
     const { data } = await cmd("Page.captureScreenshot", { format: "png", ...(clip ? { clip } : {}) });
     mkdirSync(OUT, { recursive: true });
@@ -187,13 +205,18 @@ try {
 
   // ---- sign in (personal presets need a user), then set up the demo job
   await open("/login", "en");
-  await evaluate(`
-    document.querySelector("input[name=j_username]").value = ${JSON.stringify(USER)};
-    document.querySelector("input[name=j_password]").value = ${JSON.stringify(PASSWORD)};
-    document.querySelector("form[name=login]").submit();`);
+  await run(
+    (user, password) => {
+      document.querySelector("input[name=j_username]").value = user;
+      document.querySelector("input[name=j_password]").value = password;
+      document.querySelector("form[name=login]").submit();
+    },
+    USER,
+    PASSWORD,
+  );
   await sleep(3000);
   await open("/", "en");
-  const exists = await evaluate(`return (await fetch(${JSON.stringify(`${base}/job/${JOB}/api/json`)})).status === 200;`);
+  const exists = await run(async (url) => (await fetch(url)).status === 200, `${base}/job/${JOB}/api/json`);
   if (!exists) {
     console.log("creating", JOB, await post(`/createItem?name=${JOB}`, JOB_XML, false));
   }
@@ -203,11 +226,7 @@ try {
     console.log(`\n--- ${lang}`);
     // Generate in this language so the default group titles are translated, then label a few fields.
     await open(`/job/${JOB}/build-parameter-enhancer/`, lang);
-    const layout = (await evaluate(`
-      const h = document.head.dataset;
-      const r = await fetch("autoGenerate", { method: "POST", headers: { [h.crumbHeader]: h.crumbValue, "Content-Type": "application/json" }, body: "{}" });
-      return (await r.json()).layout;
-    `));
+    const layout = (await post(`/job/${JOB}/build-parameter-enhancer/autoGenerate`, {})).json.layout;
     for (const [name, label] of Object.entries(FIELDS)) {
       layout.fields[name] = { ...(layout.fields[name] ?? {}), label: label[lang] };
     }
@@ -219,7 +238,7 @@ try {
 
     // Presets: one shared and one personal, so both icons show in the selector.
     const presetsUrl = `/job/${JOB}/bpe-presets`;
-    const list = await evaluate(`return (await (await fetch(${JSON.stringify(base + presetsUrl + "/list")})).json()).presets ?? [];`);
+    const list = await run(async (url) => (await (await fetch(url)).json()).presets ?? [], base + presetsUrl + "/list");
     for (const p of list) {
       await post(`${presetsUrl}/delete`, { presetId: p.id, isGlobal: p.isGlobal });
     }
@@ -232,14 +251,14 @@ try {
     await shot(`build-page${suffix}.png`, 1280, 2000, "#main-panel");
 
     // Save-as-preset dialog
-    await evaluate(`[...document.querySelectorAll("#bottom-sticker button")].find(b => b.textContent.trim() === ${JSON.stringify(lang === "en" ? "Save as preset" : "保存为预设")}).click();`);
+    await run((label) => [...document.querySelectorAll("#bottom-sticker button")].find((b) => b.textContent.trim() === label).click(), lang === "en" ? "Save as preset" : "保存为预设");
     await sleep(500);
     await shot(`presets${suffix}.png`, 1280, 900);
-    await evaluate(`document.querySelector("#bpe-preset-dialog").close();`);
+    await run(() => document.querySelector("#bpe-preset-dialog").close());
 
     // Designer with a parameter selected
     await open(`/job/${JOB}/build-parameter-enhancer/`, lang);
-    await evaluate(`[...document.querySelectorAll(".bpe-field-row")].find(r => r.textContent.includes("BUILD_TYPE"))?.click();`);
+    await run(() => [...document.querySelectorAll(".bpe-field-row")].find((r) => r.textContent.includes("BUILD_TYPE"))?.click());
     await sleep(400);
     await shot(`designer${suffix}.png`, 1600, 1000, "#bpe-designer", 16);
   }

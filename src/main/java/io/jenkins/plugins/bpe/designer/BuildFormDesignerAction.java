@@ -130,7 +130,7 @@ public class BuildFormDesignerAction implements Action, StaplerProxy {
             JSONObject po = new JSONObject();
             po.put("name", p.name());
             po.put("typeClass", p.typeClass());
-            po.put("type", p.typeKey());
+            po.put("type", p.kind());
             po.put("typeLabel", p.typeLabel());
             po.put("description", p.descriptionText() == null ? "" : p.descriptionText());
             po.put("defaultValue", p.defaultValue() == null ? "" : p.defaultValue());
@@ -328,6 +328,7 @@ public class BuildFormDesignerAction implements Action, StaplerProxy {
     }
 
     /** Sink for the preview form's action: a preview must never schedule a build. */
+    @POST
     public void doBuild(StaplerRequest2 req, StaplerResponse2 rsp) throws IOException {
         job.checkPermission(Item.CONFIGURE);
         rsp.sendError(400, I18n.text("server.previewOnly"));
