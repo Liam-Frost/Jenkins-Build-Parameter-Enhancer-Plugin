@@ -1,0 +1,30 @@
+<dl>
+  <dt>语法</dt>
+  <dd>
+    每行一条日程：<br>
+    <code><em>cron 表达式</em> % Preset=<em>预设名</em>[; KEY=value; ...]</code>
+    <ul>
+      <li>以 <code>#</code> 开头的行是注释。</li>
+      <li>单独一行 <code>TZ=Asia/Shanghai</code>（任意 IANA 时区）会修改其后各行的时区。</li>
+      <li>cron 表达式遵循 Jenkins 标准语法，支持用 <code>H</code> 分散负载。</li>
+      <li><code>Preset=<em>名字</em></code> 必填，名字必须与某个共享预设完全一致。</li>
+      <li>额外的 <code>KEY=value</code> 覆盖会覆盖预设里的值。参数值不能包含 <code>;</code>。</li>
+      <li>密码参数不能在这里覆盖（值会以明文存入 <code>config.xml</code>）。</li>
+    </ul>
+  </dd>
+  <dt>参数值的优先级</dt>
+  <dd>
+    参数默认值 → 预设值 → 本行覆盖值。<br>
+    如果预设值或覆盖值非法（例如某个选项已被删除），构建将被跳过，错误会显示在任务页面的
+    <strong>预设日程</strong>块中。
+  </dd>
+  <dt>示例</dt>
+  <dd>
+    <pre>H 2 * * * % Preset=Nightly
+H 12 * * 1-5 % Preset=Daily smoke; BRANCH=develop</pre>
+    Pipeline 写法：
+    <pre>triggers { presetCron('H 2 * * * % Preset=Nightly') }</pre>
+  </dd>
+  <dt>复制任务时</dt>
+  <dd>所有日程行会自动被注释掉。去掉 <code>#</code> 即可重新启用。</dd>
+</dl>

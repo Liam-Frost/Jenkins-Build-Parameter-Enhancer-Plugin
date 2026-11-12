@@ -75,6 +75,39 @@ lists the presets you can edit, to rename or delete them.
 A preset only contains values for parameters the job still defines. When a value can no longer be applied
 (for example a choice that was removed), the page says which parameters were skipped.
 
+## Scheduled builds with a preset
+
+Add the **Build periodically using a preset** trigger in the job's configuration to run scheduled builds
+with the values from a named shared preset.
+
+```
+H 2 * * *   % Preset=Nightly
+H 12 * * 1-5 % Preset=Daily smoke; BRANCH=develop
+```
+
+Each line is one schedule: a standard Jenkins cron expression, a `%` separator, and `Preset=<name>`.
+Optional `KEY=value` overrides separated by `;` replace specific preset values.
+Lines starting with `#` are comments; a `TZ=` line sets the timezone for the lines that follow.
+
+| Component | Meaning |
+| --- | --- |
+| `H 2 * * *` | Standard Jenkins cron. `H` distributes load. |
+| `Preset=Nightly` | Exact name of a shared preset (requires *Job/Configure*). |
+| `BRANCH=develop` | Optional override — takes priority over the preset value. |
+
+**Pipeline DSL:**
+```groovy
+triggers { presetCron('H 2 * * * % Preset=Nightly') }
+```
+
+If the preset cannot be found, or a parameter value is invalid (for example a choice that was
+removed), the build is skipped and the error is shown in the **Preset Schedules** box on the job
+page. Password parameters cannot be overridden in the schedule (the value would be stored in plain
+text in `config.xml`).
+
+When a job is copied, all schedule lines are commented out automatically. Remove the `#` to
+re-enable them.
+
 ## How it works
 
 Jenkins renders its normal Build with Parameters page. The plugin adds a script to that page which moves the

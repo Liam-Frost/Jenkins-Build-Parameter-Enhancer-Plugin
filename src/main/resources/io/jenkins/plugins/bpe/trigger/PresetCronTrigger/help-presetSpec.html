@@ -1,0 +1,30 @@
+<dl>
+  <dt>Syntax</dt>
+  <dd>
+    Each line is one schedule entry:<br>
+    <code><em>cron-expression</em> % Preset=<em>name</em>[; KEY=value; ...]</code>
+    <ul>
+      <li>Lines starting with <code>#</code> are comments.</li>
+      <li><code>TZ=Europe/Berlin</code> (or any IANA timezone) on its own line sets the timezone for following entries.</li>
+      <li>Cron expressions follow standard Jenkins syntax and support the <code>H</code> token to distribute load.</li>
+      <li><code>Preset=<em>name</em></code> is required. The name must match a shared preset exactly.</li>
+      <li>Extra <code>KEY=value</code> overrides override preset values. Parameter values cannot contain <code>;</code>.</li>
+      <li>Password parameters cannot be overridden here (the value would be stored in plain text in <code>config.xml</code>).</li>
+    </ul>
+  </dd>
+  <dt>Parameter values</dt>
+  <dd>
+    Priority: parameter default → preset value → override from this spec.<br>
+    If a preset value or override is invalid (e.g., a choice that no longer exists), the build is skipped
+    and the error is shown in the <strong>Preset Schedules</strong> box on the job page.
+  </dd>
+  <dt>Examples</dt>
+  <dd>
+    <pre>H 2 * * * % Preset=Nightly
+H 12 * * 1-5 % Preset=Daily smoke; BRANCH=develop</pre>
+    Pipeline:
+    <pre>triggers { presetCron('H 2 * * * % Preset=Nightly') }</pre>
+  </dd>
+  <dt>When a job is copied</dt>
+  <dd>All schedule lines are commented out automatically. Remove the <code>#</code> to re-enable them.</dd>
+</dl>

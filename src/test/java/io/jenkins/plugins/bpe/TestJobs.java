@@ -21,7 +21,7 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jvnet.hudson.test.JenkinsRule;
 
 /** Shared fixtures: a Pipeline job with the parameter set from the brief. */
-final class TestJobs {
+public final class TestJobs {
 
     static final String ECHO_SCRIPT = """
             def shown = ['APP_BRANCH', 'APP_COMMIT_HASH', 'BUILD_CONFIG', 'BUILD_ENV', 'VERSION',
@@ -35,7 +35,7 @@ final class TestJobs {
 
     private TestJobs() {}
 
-    static List<ParameterDefinition> sampleDefinitions() {
+    public static List<ParameterDefinition> sampleDefinitions() {
         List<ParameterDefinition> p = new ArrayList<>();
         for (String repo : new String[] {"APP", "SDK", "DOCS", "ENGINE"}) {
             p.add(new StringParameterDefinition(
@@ -72,7 +72,7 @@ final class TestJobs {
         return p;
     }
 
-    static WorkflowJob sampleJob(JenkinsRule r, String name) throws Exception {
+    public static WorkflowJob sampleJob(JenkinsRule r, String name) throws Exception {
         WorkflowJob job = r.createProject(WorkflowJob.class, name);
         job.setDefinition(new CpsFlowDefinition(ECHO_SCRIPT, true));
         job.addProperty(new ParametersDefinitionProperty(sampleDefinitions()));
@@ -80,7 +80,7 @@ final class TestJobs {
     }
 
     /** Generates and publishes a layout from the default rules, as an administrator would. */
-    static FormLayout publishGeneratedLayout(Job<?, ?> job) throws IOException {
+    public static FormLayout publishGeneratedLayout(Job<?, ?> job) throws IOException {
         var params = ParameterDiscovery.discover(job);
         FormLayout layout = AutoLayoutGenerator.generate(params, AutoLayoutGenerator.defaultRules());
         layout.setKnownParameters(ChangeDetector.snapshot(params));

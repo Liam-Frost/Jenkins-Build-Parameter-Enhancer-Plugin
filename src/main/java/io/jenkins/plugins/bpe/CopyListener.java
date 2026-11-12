@@ -5,7 +5,9 @@ import hudson.model.Item;
 import hudson.model.Job;
 import hudson.model.User;
 import hudson.model.listeners.ItemListener;
+import hudson.triggers.Trigger;
 import io.jenkins.plugins.bpe.model.FormDesign;
+import io.jenkins.plugins.bpe.trigger.PresetCronTrigger;
 import io.jenkins.plugins.bpe.user.ParameterPresetUserProperty;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -35,6 +37,41 @@ public class CopyListener extends ItemListener {
             FormDesignStore.save(to, design);
         } catch (IOException | RuntimeException e) {
             LOGGER.log(Level.WARNING, "Could not copy the build form design to " + to.getFullName(), e);
+        }
+        // Disable preset schedules when copied
+        disablePresetSchedules(to, from.getFullName());
+    }
+
+    private void disablePresetSchedules(Job<?, ?> job, String sourceFullName) {
+        if (!(job instanceof jenkins.model.ParameterizedJobMixIn.ParameterizedJob)) {
+            return;
+        }
+        jenkins.model.ParameterizedJobMixIn.ParameterizedJob<?, ?> pjob =
+                (jenkins.model.ParameterizedJobMixIn.ParameterizedJob<?, ?>) job;
+        for (Trigger<?> trigger : pjob.getTriggers().values()) {
+            if (trigger instanceof PresetCronTrigger) {
+                PresetCronTrigger preset = (PresetCronTrigger) trigger;
+                String original = preset.getPresetSpec();
+                if (original == null || original.isBlank()) {
+                    continue;
+                }
+                StringBuilder disabled = new StringBuilder();
+                disabled.append("# Copied from ").append(sourceFullName).append(". Remove the # to enable.\n");
+                for (String line : original.split("\\r?\\n")) {
+                    String trimmed = line.trim();
+                    if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
+                        disabled.append("# ");
+                    }
+                    disabled.append(line).append("\n");
+                }
+                try {
+                    preset.replacePresetSpec(disabled.toString());
+                    job.save();
+                } catch (Exception e) {
+                    LOGGER.log(
+                            Level.WARNING, "Could not disable preset schedule in copied job " + job.getFullName(), e);
+                }
+            }
         }
     }
 

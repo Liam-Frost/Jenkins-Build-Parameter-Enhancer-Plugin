@@ -1,0 +1,31 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+  <j:if test="${!it.schedules.isEmpty()}">
+    <div class="jenkins-module">
+      <h2>${%Preset Schedules}</h2>
+      <table class="jenkins-table jenkins-table--sortable">
+        <thead>
+          <tr>
+            <th>${%Preset}</th>
+            <th>${%Overrides}</th>
+            <th>${%Next run}</th>
+            <th>${%Last error}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <j:forEach var="s" items="${it.schedules}">
+            <tr>
+              <td><strong>${s.presetName}</strong></td>
+              <td><j:if test="${s.overrides.isEmpty()}">—</j:if><j:if test="${!s.overrides.isEmpty()}">${s.overridesSummary}</j:if></td>
+              <td>${s.nextRunFormatted}</td>
+              <td>
+                <j:if test="${s.error == null}">—</j:if>
+                <j:if test="${s.error != null}"><span class="warning">${s.error}</span></j:if>
+              </td>
+            </tr>
+          </j:forEach>
+        </tbody>
+      </table>
+    </div>
+  </j:if>
+</j:jelly>

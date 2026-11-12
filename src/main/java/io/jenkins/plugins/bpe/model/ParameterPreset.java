@@ -29,6 +29,15 @@ public class ParameterPreset implements Serializable {
         this.name = name;
     }
 
+    /** Test helper: create with name, description and values. */
+    public ParameterPreset(String name, String description, String createdBy, Map<String, String> values) {
+        this.id = name;
+        this.name = name;
+        this.description = FieldLayout.blankToNull(description);
+        this.createdBy = createdBy;
+        this.values = new LinkedHashMap<>(values);
+    }
+
     public String getId() {
         return id;
     }
